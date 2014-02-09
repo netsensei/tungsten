@@ -30,7 +30,7 @@ game.appendTo(container)
 var createPlayer = require('voxel-player')(game)
 var dude = new createPlayer('dude.png')
 dude.possess()
-dude.yaw.position.set(2, 14, 4)
+dude.yaw.position.set(2, 3, 4)
 
 var target = game.controls.target()
 
