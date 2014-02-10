@@ -1,40 +1,42 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var createEngine = require('voxel-engine')
-var voxel = require('voxel')
-var walk = require('voxel-walk')
-var terrain = require('./lib/terrain.js')
+var createEngine = require('voxel-engine');
+var voxel = require('voxel');
+var walk = require('voxel-walk');
+var terrain = require('./lib/terrain.js');
 
 var game = createEngine({
   generateChunks: false,
-  chunkDistance: 3,
+  chunkDistance: 2,
   texturePath: './textures/',
+  materials: [['grass', 'dirt', 'grass_dirt'], 'dirt'],
   worldOrigin: [0, 0, 0],
   controls: { discreteFire: true }
-})
+});
 
 // Generate terrain
-var generateChunk = terrain()
+var generateChunk = terrain();
 
 game.voxels.on('missingChunk', function(p) {
-  var voxels = generateChunk(p, 32)
+  var voxels = generateChunk(p, 32);
   var chunk = {
     position: p,
     dims: [32, 32, 32],
     voxels: voxels
-  }
-  game.showChunk(chunk)
-})
+  };
 
-var container = document.body
-game.appendTo(container)
+  game.showChunk(chunk);
+});
+
+var container = document.body;
+game.appendTo(container);
 
 // Create a player
-var createPlayer = require('voxel-player')(game)
-var dude = new createPlayer('dude.png')
-dude.possess()
-dude.yaw.position.set(2, 3, 4)
+var createPlayer = require('voxel-player')(game);
+var dude = new createPlayer('dude.png');
+dude.possess();
+dude.yaw.position.set(2, 3, 4);
 
-var target = game.controls.target()
+var target = game.controls.target();
 
 // Create clouds
 var clouds = require('voxel-clouds')({
@@ -50,50 +52,51 @@ var clouds = require('voxel-clouds')({
     transparent: true,
     opacity: 0.5
   })
-})
+});
 
 game.on('tick', function() {
-  walk.render(target.playerSkin)
-  var vx = Math.abs(target.velocity.x)
-  var vz = Math.abs(target.velocity.z)
-  if (vx > 0.001 || vz > 0.001) walk.stopWalking()
-    else walk.startWalking()
+  walk.render(target.playerSkin);
+  var vx = Math.abs(target.velocity.x);
+  var vz = Math.abs(target.velocity.z);
+  if (vx > 0.001 || vz > 0.001) walk.stopWalking();
+    else walk.startWalking();
+});
 
-  clouds.tick.bind(clouds)
-})
+game.on('tick', clouds.tick.bind(clouds));
 
 },{"./lib/terrain.js":2,"voxel":46,"voxel-clouds":3,"voxel-engine":7,"voxel-player":42,"voxel-walk":44}],2:[function(require,module,exports){
 module.exports = function() {
 
   return function generateChunk(position, width) {
-    var startX = position[0] * width
-    var startY = position[1] * width
-    var startZ = position[2] * width
-    var chunk = new Int8Array(width * width * width)
+    var startX = position[0] * width;
+    var startY = position[1] * width;
+    var startZ = position[2] * width;
+    var chunk = new Int8Array(width * width * width);
 
     pointsInside(startX, startZ, width, function(x, z) {
-      var y = 2
+      var y = 2;
 
       if (startY < y && y < startY + width) {
-        var xidx = Math.abs((width + x % width) % width)
-        var yidx = Math.abs((width + y % width) % width)
-        var zidx = Math.abs((width + z % width) % width)
-        var idx = xidx + yidx * width + zidx * width * width
-        chunk[idx] = 1
-      }
-    })
+        var xidx = Math.abs((width + x % width) % width);
+        var yidx = Math.abs((width + y % width) % width);
+        var zidx = Math.abs((width + z % width) % width);
 
-    return chunk
-  }
+        var idx = xidx + yidx * width + zidx * width * width;
+        chunk[idx] = (Math.random() * 2) + 1;
+      }
+    });
+
+    return chunk;
+  };
 
   function pointsInside(startX, startZ, width, func) {
     for (var x = startX; x <= startX + width; x++) {
       for (var z = startZ; z <= startZ + width; z++) {
-        func(x, z)
+        func(x, z);
       }
     }
   }
-}
+};
 
 },{}],3:[function(require,module,exports){
 var voxelMesh = require('voxel-mesh');
