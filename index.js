@@ -57,6 +57,6 @@ game.on('tick', function() {
   var vz = Math.abs(target.velocity.z)
   if (vx > 0.001 || vz > 0.001) walk.stopWalking()
     else walk.startWalking()
-
-  clouds.tick.bind(clouds)
 })
+
+game.on('tick', clouds.tick.bind(clouds))
