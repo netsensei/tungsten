@@ -7,6 +7,7 @@ var game = createEngine({
   generateChunks: false,
   chunkDistance: 2,
   texturePath: './textures/',
+  materials: [['grass', 'dirt', 'grass_dirt'], 'dirt'],
   worldOrigin: [0, 0, 0],
   controls: { discreteFire: true }
 });
