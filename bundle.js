@@ -67,9 +67,10 @@ game.on('tick', clouds.tick.bind(clouds));
 var flowers = require('./lib/flowers.js')({
   game: game,
   distance: 50,
-  many: 200
+  many: 350
 });
 game.on('tick', flowers.tick.bind(flowers));
+
 
 },{"./lib/flowers.js":2,"./lib/terrain.js":4,"voxel":48,"voxel-clouds":5,"voxel-engine":9,"voxel-player":44,"voxel-walk":46}],2:[function(require,module,exports){
 /* var Sprite = require('./lib/sprite.js')({
@@ -124,7 +125,7 @@ Flowers.prototype.tick = function(dt) {
 Flowers.prototype._position = function(flower) {
   var player = this.game.controls.target().avatar.position;
   var x = rand(player.x - this.distance, player.x + this.distance);
-  var y = 4;
+  var y = 3.5;
   var z = rand(player.z - this.distance, player.z + this.distance);
   flower.setPosition(x, y, z);
 };
