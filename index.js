@@ -66,6 +66,7 @@ game.on('tick', clouds.tick.bind(clouds));
 var flowers = require('./lib/flowers.js')({
   game: game,
   distance: 50,
-  many: 200
+  many: 350
 });
 game.on('tick', flowers.tick.bind(flowers));
+
