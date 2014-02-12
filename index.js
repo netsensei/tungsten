@@ -60,5 +60,12 @@ game.on('tick', function() {
   if (vx > 0.001 || vz > 0.001) walk.stopWalking();
     else walk.startWalking();
 });
-
 game.on('tick', clouds.tick.bind(clouds));
+
+// Create flowers
+var flowers = require('./lib/flowers.js')({
+  game: game,
+  distance: 50,
+  many: 200
+});
+game.on('tick', flowers.tick.bind(flowers));
